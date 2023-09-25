@@ -10,7 +10,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author victoriocarvalho
+ * @author FeLiXp90, etc, etc, etc .....
  */
 public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
