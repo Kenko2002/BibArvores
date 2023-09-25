@@ -23,11 +23,37 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
     public ArvoreBinariaExemplo(Comparator<T> comp) {
         comparador = comp;
     }
-    
+
 
     @Override
     public void adicionar(T novoValor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        NoExemplo<T> novoNo = new NoExemplo<T>(novoValor);
+
+        if (raiz == null) {
+            raiz = novoNo;
+            return; // Encerra o método adicionar quando a árvore está vazia.
+        }
+
+        atual = raiz;
+        while (true) {
+            int comparacao = comparador.compare(novoValor, atual.getValor());
+            if (comparacao < 0) {
+                if (atual.getFilhoEsquerda() == null) {
+                    atual.setFilhoEsquerda(novoNo);
+                    return; // Encerra o método quando o novo valor foi adicionado.
+                }
+                atual = atual.getFilhoEsquerda();
+            } else if (comparacao > 0) {
+                if (atual.getFilhoDireita() == null) {
+                    atual.setFilhoDireita(novoNo);
+                    return; // Encerra o método quando o novo valor foi adicionado.
+                }
+                atual = atual.getFilhoDireita();
+            } else {
+                // Se a diferença do comparador for 0, então já existe, se valor já existe na árvore, não faz nada. Ou podemos fazer com que todos nós duplicados sejam adicionado à direita. *Cada elemento possui um ramo esquerda (menores) e um ramo direito (maiores ou iguais)*
+                return;
+            }
+        }
     }
 
     @Override
