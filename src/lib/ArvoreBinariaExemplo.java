@@ -126,7 +126,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         if (atual.getFilhoEsquerda() == null && atual.getFilhoDireita() == null) {
             if (pai == null) { //Se pai é nulo, então atual é raiz.
                 raiz = null;
-            } else if (atual == pai.getFilhoEsquerda()) { //Se não for, verifica se o nó atual é o filho esquerda ou direita do pai (talvez dê para melhorar já dizendo qual lado do pai é atual.)
+            } else if (atual == pai.getFilhoEsquerda()) { //Se não for, verifica se o nó atual é o filho esquerda ou direita do pai (talvez dê para melhorar já dizendo qual lado do pai é atual. PENSEM!!)
                 pai.setFilhoEsquerda(null);
             } else {
                 pai.setFilhoDireita(null);
@@ -135,10 +135,11 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         }
 
         // Caso 2: Se o nó atual tem um filho (esquerda ou direita).
+        // Se for filho a esquerda:
         if (atual.getFilhoEsquerda() != null && atual.getFilhoDireita() == null) {
-            if (pai == null) {
+            if (pai == null) { //Se pai é nulo, então atual é raiz e tem filho a esquerda.
                 raiz = atual.getFilhoEsquerda();
-            } else if (atual == pai.getFilhoEsquerda()) {
+            } else if (atual == pai.getFilhoEsquerda()) { //Se não for, verifica se o nó atual é o filho esquerda ou direita do pai.
                 pai.setFilhoEsquerda(atual.getFilhoEsquerda());
             } else {
                 pai.setFilhoDireita(atual.getFilhoEsquerda());
@@ -146,9 +147,9 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             return atual.getValor();
         }
 
+        //Se for filho a direita:
         if (atual.getFilhoDireita() != null && atual.getFilhoEsquerda() == null) {
             if (pai == null) {
-                // O nó a ser removido é a raiz da árvore.
                 raiz = atual.getFilhoDireita();
             } else if (atual == pai.getFilhoEsquerda()) {
                 pai.setFilhoEsquerda(atual.getFilhoDireita());
@@ -157,7 +158,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             }
             return atual.getValor();
         }
-        return atual.getValor();
+        return null;
     }
 
     @Override
