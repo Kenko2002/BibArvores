@@ -12,7 +12,6 @@ Na pasta [lib](src/lib) se encontram os seguintes arquivos:
 - [Aluno.java](src/app/Aluno.java): Classe Aluno utilizada pelos Apps de teste.
 - [ComparadorAlunoPorMatricula.java](src/app/ComparadorAlunoPorMatricula.java): Comparator utilizado pelos Apps de teste.
 - [GeradorDeArvores.java](src/app/GeradorDeArvores.java): Classe utilizada pelos Apps para gerar gerar árvores a serem utilizadas nos testes.
-- [ComparadorAlunoPorMatricula.java](src/app/ComparadorAlunoPorMatricula.java): Comparator utilizado pelos Apps de teste.
 - [AppRelatorioArvoreBinaria.java](src/app/AppRelatorioArvoreBinaria.java): App a ser executado para fazer o relatório da primeira etapa do trabalho.
 - [AppRelatorioAvl.java](src/app/AppRelatorioAvl.java): App a ser executado para fazer o relatório da terceira etapa do trabalho.
 
