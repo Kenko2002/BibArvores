@@ -101,11 +101,11 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             int comparacao = comparador.compare(valor, atual.getValor());
 
             /*
-            * Seguinte, aqui é o mesmo esquema que pesquisar, a arvore vai começar a ser
-            * varrida até encontrar o valor. Uma vez encontrado a var atual vai receber
-            * o valor e a var pai vai referenciar o nó pai de atual. Então quando,
-            * comparacao == 0 ele termina o loop de busca já que atual vai ser valor.
-            */
+             * Seguinte, aqui é o mesmo esquema que pesquisar, a arvore vai começar a ser
+             * varrida até encontrar o valor. Uma vez encontrado a var atual vai receber
+             * o valor e a var pai vai referenciar o nó pai de atual. Então quando,
+             * comparacao == 0 ele termina o loop de busca já que atual vai ser valor.
+             */
             if (comparacao == 0) {
                 break;
             } else if (comparacao < 0) {
@@ -121,7 +121,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             return null;
         }
 
-        //Fim da pesquisa. Agora temos que remover o nó, mas caso ele tenha filhos?
+        // Fim da pesquisa. Agora temos que remover o nó, mas caso ele tenha filhos?
         // Caso 1: Se o nó atual for uma folha (não tem filhos), simplesmente remova-o.
         if (atual.getFilhoEsquerda() == null && atual.getFilhoDireita() == null) {
             if (pai == null) { //Se pai é nulo, então atual é raiz.
@@ -147,7 +147,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             return atual.getValor();
         }
 
-        //Se for filho a direita:
+        // Se for filho a direita:
         if (atual.getFilhoDireita() != null && atual.getFilhoEsquerda() == null) {
             if (pai == null) {
                 raiz = atual.getFilhoDireita();
@@ -158,8 +158,42 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             }
             return atual.getValor();
         }
+
+        /* Caso 3: O nó atual tem dois filhos.
+         * Vamos a lógica:
+         * Para remover um nó com dois filhos, precisamos encontrar um substituto.
+         * Seja escolhendo o lado da direita ou da esquerda.
+         * Vamos à subárvore à esquerda do nó atual para encontrar o substituto.
+         * O substituto será o valor mais à direita nessa subárvore, pois é o próximo
+         * valor mais próximo e maior que pode substituir o nó atual.
+         * Salvamos o pai do substituto, pois o substituto pode ter um filho à esquerda.
+         * Caso tenha um filho à esquerda, o pai do substituto precisa referenciar
+         * esse filho como seu filho à direita.
+         * Após a substituição, atualizamos a estrutura da árvore conforme necessário
+         * e retornamos o valor do substituto.
+         */
+        if (atual.getFilhoEsquerda() != null && atual.getFilhoDireita() != null) {
+
+            NoExemplo<T> paiSubstituto = atual;
+            NoExemplo<T> substituto = atual.getFilhoEsquerda();
+
+            while (substituto.getFilhoDireita() != null) {
+                paiSubstituto = substituto;
+                substituto = substituto.getFilhoDireita();
+            }
+
+            atual.setValor(substituto.getValor()); // Agora substituto é o nó que deve substituir o nó atual.
+
+            if (paiSubstituto != atual) { // Verificar se o substituto tem filho à esquerda.
+                paiSubstituto.setFilhoDireita(substituto.getFilhoEsquerda());
+            } else {
+                atual.setFilhoEsquerda(substituto.getFilhoEsquerda()); // Caso especial: o substituto é filho esquerda do nó atual.
+            }
+            return substituto.getValor();
+        }
         return null;
     }
+
 
     @Override
     public int altura() {
