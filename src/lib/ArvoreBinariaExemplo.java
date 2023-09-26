@@ -221,7 +221,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             return 0; // Árvore vazia, portanto, nenhum nó.
         }
 
-        return pilhaNavegacao.size() + 1; // +1 para contar a raiz.
+        return pilhaNavegacao.size();
     }
 
     @Override
