@@ -201,13 +201,27 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
     @Override
     public int altura() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return calcularAltura(raiz);
+    }
+
+    private int calcularAltura(NoExemplo<T> no) {
+        if (no == null) {
+            return -1;
+        } else {
+            int alturaEsquerda = calcularAltura(no.getFilhoEsquerda());
+            int alturaDireita = calcularAltura(no.getFilhoDireita());
+            return Math.max(alturaEsquerda, alturaDireita) + 1;
+        }
     }
 
 
     @Override
     public int quantidadeNos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (pilhaNavegacao == null) {
+            return 0; // Árvore vazia, portanto, nenhum nó.
+        }
+
+        return pilhaNavegacao.size() + 1; // +1 para contar a raiz.
     }
 
     @Override
