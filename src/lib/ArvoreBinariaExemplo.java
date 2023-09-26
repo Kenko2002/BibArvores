@@ -131,6 +131,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             } else {
                 pai.setFilhoDireita(null);
             }
+            pilhaNavegacao.remove(atual);
             return atual.getValor();
         }
 
@@ -144,6 +145,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             } else {
                 pai.setFilhoDireita(atual.getFilhoEsquerda());
             }
+            pilhaNavegacao.remove(atual);
             return atual.getValor();
         }
 
@@ -156,6 +158,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             } else {
                 pai.setFilhoDireita(atual.getFilhoDireita());
             }
+            pilhaNavegacao.remove(atual);
             return atual.getValor();
         }
 
@@ -189,6 +192,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             } else {
                 atual.setFilhoEsquerda(substituto.getFilhoEsquerda()); // Caso especial: o substituto é filho esquerda do nó atual.
             }
+            pilhaNavegacao.remove(atual);
             return substituto.getValor();
         }
         return null;
