@@ -28,28 +28,31 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
     @Override
     public void adicionar(T novoValor) {
         NoExemplo<T> novoNo = new NoExemplo<T>(novoValor);
+        pilhaNavegacao = new ArrayList<NoExemplo<T>>(); // Inicializa a pilha de navegação.
 
         if (raiz == null) {
             raiz = novoNo;
-            return; // Encerra o método adicionar quando a árvore está vazia.
+            pilhaNavegacao.add(novoNo); // Adiciona o nó atual à pilha de navegação.
+            return;
         }
 
         atual = raiz;
-        pilhaNavegacao = new ArrayList<NoExemplo<T>>(); // Inicializa a pilha de navegação.
 
         while (true) {
             int comparacao = comparador.compare(novoValor, atual.getValor());
-            pilhaNavegacao.add(atual); // Adiciona o nó atual à pilha de navegação.
+
 
             if (comparacao < 0) {
                 if (atual.getFilhoEsquerda() == null) {
                     atual.setFilhoEsquerda(novoNo);
+                    pilhaNavegacao.add(novoNo); // Adiciona o nó atual à pilha de navegação.
                     return; // Encerra o método quando o novo valor foi adicionado.
                 }
                 atual = atual.getFilhoEsquerda();
             } else if (comparacao > 0) {
                 if (atual.getFilhoDireita() == null) {
                     atual.setFilhoDireita(novoNo);
+                    pilhaNavegacao.add(novoNo);
                     return; // Encerra o método quando o novo valor foi adicionado.
                 }
                 atual = atual.getFilhoDireita();
@@ -125,13 +128,15 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         // Caso 1: Se o nó atual for uma folha (não tem filhos), simplesmente remova-o.
         if (atual.getFilhoEsquerda() == null && atual.getFilhoDireita() == null) {
             if (pai == null) { //Se pai é nulo, então atual é raiz.
+                pilhaNavegacao.remove(raiz);
                 raiz = null;
             } else if (atual == pai.getFilhoEsquerda()) { //Se não for, verifica se o nó atual é o filho esquerda ou direita do pai (talvez dê para melhorar já dizendo qual lado do pai é atual. PENSEM!!)
+                pilhaNavegacao.remove(pai.getFilhoEsquerda());
                 pai.setFilhoEsquerda(null);
-            } else {
+            } else if (atual == pai.getFilhoDireita()) {
+                pilhaNavegacao.remove(pai.getFilhoDireita());
                 pai.setFilhoDireita(null);
             }
-            pilhaNavegacao.remove(atual);
             return atual.getValor();
         }
 
@@ -139,31 +144,35 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         // Se for filho a esquerda:
         if (atual.getFilhoEsquerda() != null && atual.getFilhoDireita() == null) {
             if (pai == null) { //Se pai é nulo, então atual é raiz e tem filho a esquerda.
+                pilhaNavegacao.remove(raiz);
                 raiz = atual.getFilhoEsquerda();
             } else if (atual == pai.getFilhoEsquerda()) { //Se não for, verifica se o nó atual é o filho esquerda ou direita do pai.
+                pilhaNavegacao.remove(pai.getFilhoEsquerda());
                 pai.setFilhoEsquerda(atual.getFilhoEsquerda());
             } else {
+                pilhaNavegacao.remove(pai.getFilhoDireita());
                 pai.setFilhoDireita(atual.getFilhoEsquerda());
             }
-            pilhaNavegacao.remove(atual);
             return atual.getValor();
         }
 
         // Se for filho a direita:
         if (atual.getFilhoDireita() != null && atual.getFilhoEsquerda() == null) {
             if (pai == null) {
+                pilhaNavegacao.remove(atual.getFilhoDireita());
                 raiz = atual.getFilhoDireita();
             } else if (atual == pai.getFilhoEsquerda()) {
+                pilhaNavegacao.remove(atual.getFilhoDireita());
                 pai.setFilhoEsquerda(atual.getFilhoDireita());
             } else {
+                pilhaNavegacao.remove(atual.getFilhoDireita());
                 pai.setFilhoDireita(atual.getFilhoDireita());
             }
-            pilhaNavegacao.remove(atual);
             return atual.getValor();
         }
 
         /* Caso 3: O nó atual tem dois filhos.
-         * Vamos a lógica:
+         * Vamos à lógica:
          * Para remover um nó com dois filhos, precisamos encontrar um substituto.
          * Seja escolhendo o lado da direita ou da esquerda.
          * Vamos à subárvore à esquerda do nó atual para encontrar o substituto.
