@@ -10,7 +10,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author FeLiXp90, etc, etc, etc .....
+ * @author FeLiXp90, JoaoFerrareis02, etc, etc .....
  */
 public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
@@ -131,10 +131,10 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
                 pilhaNavegacao.remove(raiz);
                 raiz = null;
             } else if (atual == pai.getFilhoEsquerda()) { //Se não for, verifica se o nó atual é o filho esquerda ou direita do pai (talvez dê para melhorar já dizendo qual lado do pai é atual. PENSEM!!)
-                pilhaNavegacao.remove(pai.getFilhoEsquerda());
+                pilhaNavegacao.remove(atual);
                 pai.setFilhoEsquerda(null);
             } else if (atual == pai.getFilhoDireita()) {
-                pilhaNavegacao.remove(pai.getFilhoDireita());
+                pilhaNavegacao.remove(atual);
                 pai.setFilhoDireita(null);
             }
             return atual.getValor();
@@ -144,13 +144,13 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         // Se for filho a esquerda:
         if (atual.getFilhoEsquerda() != null && atual.getFilhoDireita() == null) {
             if (pai == null) { //Se pai é nulo, então atual é raiz e tem filho a esquerda.
-                pilhaNavegacao.remove(raiz);
+                pilhaNavegacao.remove(atual);
                 raiz = atual.getFilhoEsquerda();
             } else if (atual == pai.getFilhoEsquerda()) { //Se não for, verifica se o nó atual é o filho esquerda ou direita do pai.
-                pilhaNavegacao.remove(pai.getFilhoEsquerda());
+                pilhaNavegacao.remove(atual);
                 pai.setFilhoEsquerda(atual.getFilhoEsquerda());
             } else {
-                pilhaNavegacao.remove(pai.getFilhoDireita());
+                pilhaNavegacao.remove(atual);
                 pai.setFilhoDireita(atual.getFilhoEsquerda());
             }
             return atual.getValor();
@@ -159,13 +159,13 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         // Se for filho a direita:
         if (atual.getFilhoDireita() != null && atual.getFilhoEsquerda() == null) {
             if (pai == null) {
-                pilhaNavegacao.remove(atual.getFilhoDireita());
+                pilhaNavegacao.remove(atual);
                 raiz = atual.getFilhoDireita();
             } else if (atual == pai.getFilhoEsquerda()) {
-                pilhaNavegacao.remove(atual.getFilhoDireita());
+                pilhaNavegacao.remove(atual);
                 pai.setFilhoEsquerda(atual.getFilhoDireita());
             } else {
-                pilhaNavegacao.remove(atual.getFilhoDireita());
+                pilhaNavegacao.remove(atual);
                 pai.setFilhoDireita(atual.getFilhoDireita());
             }
             return atual.getValor();
