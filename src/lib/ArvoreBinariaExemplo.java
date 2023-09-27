@@ -18,6 +18,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
     protected NoExemplo<T> atual = null;
     private ArrayList<NoExemplo<T>> pilhaNavegacao = null;
+    private boolean primeiraChamada = true;
 
     public ArvoreBinariaExemplo(Comparator<T> comp) {
         comparador = comp;
@@ -310,15 +311,51 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         return resultado.toString();
     }
 
-
     @Override
-    public T obterProximo(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public T obterProximo() {
+        if (raiz == null){
+            return null;
+        }
+
+        if (primeiraChamada) {
+            primeiraChamada = false;
+            atual = raiz;
+
+            while (atual != null) {
+                pilhaNavegacao.add(atual);
+                atual = atual.getFilhoEsquerda();
+            }
+        } else {
+
+            if (atual.getFilhoDireita() != null) {
+                atual = atual.getFilhoDireita();
+
+                while (atual != null) {
+                    pilhaNavegacao.add(atual);
+                    atual = atual.getFilhoEsquerda();
+                }
+            } else {
+
+                NoExemplo<T> pai = pilhaNavegacao.remove(pilhaNavegacao.size() - 1);
+
+                while (!pilhaNavegacao.isEmpty() && atual == pai.getFilhoDireita()) {
+                    atual = pai;
+                    pai = pilhaNavegacao.remove(pilhaNavegacao.size() - 1);
+                }
+
+                atual = pai;
+            }
+        }
+
+        // Retorna o valor do nó atual.
+        return atual != null ? atual.getValor() : null;
     }
+
 
     @Override
     public void reiniciarNavegacao() {
         if (pilhaNavegacao != null) {
+            primeiraChamada = true;
             pilhaNavegacao.clear();
         }
     }
