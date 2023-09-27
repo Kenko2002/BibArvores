@@ -29,6 +29,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         NoExemplo<T> novoNo = new NoExemplo<T>(novoValor);
 
         if (raiz == null) {
+            pilhaNavegacao = new ArrayList<>();
             raiz = novoNo;
             return;
         }
@@ -200,23 +201,24 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         }
 
         int altura = -1;
-        List<NoExemplo<T>> nivelAtual = new ArrayList<>();
-        nivelAtual.add(raiz);
+        pilhaNavegacao.clear(); // Limpa a pilha de navegação.
+        pilhaNavegacao.add(raiz); // Adiciona a raiz à pilha.
 
-        while (!nivelAtual.isEmpty()) {
-            List<NoExemplo<T>> proximoNivel = new ArrayList<>();
+        while (!pilhaNavegacao.isEmpty()) {
+            int tamanhoNivel = pilhaNavegacao.size();
 
-            for (NoExemplo<T> no : nivelAtual) {
+            for (int i = 0; i < tamanhoNivel; i++) {
+                NoExemplo<T> no = pilhaNavegacao.remove(0);
+
                 if (no.getFilhoEsquerda() != null) {
-                    proximoNivel.add(no.getFilhoEsquerda());
+                    pilhaNavegacao.add(no.getFilhoEsquerda());
                 }
 
                 if (no.getFilhoDireita() != null) {
-                    proximoNivel.add(no.getFilhoDireita());
+                    pilhaNavegacao.add(no.getFilhoDireita());
                 }
             }
 
-            nivelAtual = proximoNivel;
             altura++;
         }
 
