@@ -235,8 +235,39 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
     @Override
     public String caminharEmNivel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder resultado = new StringBuilder("[");
+        if (raiz == null){
+            resultado.append("Vazio]");
+            return resultado.toString();
+        } else (raiz != null) {
+            ArrayList<NoExemplo<T>> nivelAtual = new ArrayList<>();
+            nivelAtual.add(raiz);
+
+            while (!nivelAtual.isEmpty()) {
+                ArrayList<NoExemplo<T>> proximoNivel = new ArrayList<>();
+
+                for (NoExemplo<T> no : nivelAtual) {
+                    resultado.append(no.getValor().toString()).append("\n");
+
+                    if (no.getFilhoEsquerda() != null) {
+                        proximoNivel.add(no.getFilhoEsquerda());
+                    }
+
+                    if (no.getFilhoDireita() != null) {
+                        proximoNivel.add(no.getFilhoDireita());
+                    }
+                }
+
+                nivelAtual = proximoNivel;
+            }
+        }
+
+        resultado.append("]");
+
+        return resultado.toString();
     }
+
+
 
     @Override
     public String caminharEmOrdem() {
