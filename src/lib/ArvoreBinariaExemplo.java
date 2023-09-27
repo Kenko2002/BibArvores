@@ -194,6 +194,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
                 substituto = substituto.getFilhoDireita();
             }
 
+            pilhaNavegacao.remove(atual);
             atual.setValor(substituto.getValor()); // Agora substituto é o nó que deve substituir o nó atual.
 
             if (paiSubstituto != atual) { // Verificar se o substituto tem filho à esquerda.
@@ -201,7 +202,6 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             } else {
                 atual.setFilhoEsquerda(substituto.getFilhoEsquerda()); // Caso especial: o substituto é filho esquerda do nó atual.
             }
-            pilhaNavegacao.remove(atual);
             return substituto.getValor();
         }
         return null;
