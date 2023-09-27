@@ -27,11 +27,9 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
     @Override
     public void adicionar(T novoValor) {
         NoExemplo<T> novoNo = new NoExemplo<T>(novoValor);
-        pilhaNavegacao = new ArrayList<NoExemplo<T>>(); // Inicializa a pilha de navegação.
 
         if (raiz == null) {
             raiz = novoNo;
-            pilhaNavegacao.add(novoNo); // Adiciona o nó atual à pilha de navegação.
             return;
         }
 
@@ -44,14 +42,12 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
             if (comparacao < 0) {
                 if (atual.getFilhoEsquerda() == null) {
                     atual.setFilhoEsquerda(novoNo);
-                    pilhaNavegacao.add(novoNo); // Adiciona o nó atual à pilha de navegação.
                     return; // Encerra o método quando o novo valor foi adicionado.
                 }
                 atual = atual.getFilhoEsquerda();
             } else if (comparacao > 0) {
                 if (atual.getFilhoDireita() == null) {
                     atual.setFilhoDireita(novoNo);
-                    pilhaNavegacao.add(novoNo);
                     return; // Encerra o método quando o novo valor foi adicionado.
                 }
                 atual = atual.getFilhoDireita();
@@ -127,13 +123,10 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         // Caso 1: Se o nó atual for uma folha (não tem filhos), simplesmente remova-o.
         if (atual.getFilhoEsquerda() == null && atual.getFilhoDireita() == null) {
             if (pai == null) { //Se pai é nulo, então atual é raiz.
-                pilhaNavegacao.remove(raiz);
                 raiz = null;
             } else if (atual == pai.getFilhoEsquerda()) { //Se não for, verifica se o nó atual é o filho esquerda ou direita do pai (talvez dê para melhorar já dizendo qual lado do pai é atual. PENSEM!!)
-                pilhaNavegacao.remove(atual);
                 pai.setFilhoEsquerda(null);
             } else if (atual == pai.getFilhoDireita()) {
-                pilhaNavegacao.remove(atual);
                 pai.setFilhoDireita(null);
             }
             return atual.getValor();
@@ -143,13 +136,10 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         // Se for filho a esquerda:
         if (atual.getFilhoEsquerda() != null && atual.getFilhoDireita() == null) {
             if (pai == null) { //Se pai é nulo, então atual é raiz e tem filho a esquerda.
-                pilhaNavegacao.remove(atual);
                 raiz = atual.getFilhoEsquerda();
             } else if (atual == pai.getFilhoEsquerda()) { //Se não for, verifica se o nó atual é o filho esquerda ou direita do pai.
-                pilhaNavegacao.remove(atual);
                 pai.setFilhoEsquerda(atual.getFilhoEsquerda());
             } else {
-                pilhaNavegacao.remove(atual);
                 pai.setFilhoDireita(atual.getFilhoEsquerda());
             }
             return atual.getValor();
@@ -158,13 +148,10 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         // Se for filho a direita:
         if (atual.getFilhoDireita() != null && atual.getFilhoEsquerda() == null) {
             if (pai == null) {
-                pilhaNavegacao.remove(atual);
                 raiz = atual.getFilhoDireita();
             } else if (atual == pai.getFilhoEsquerda()) {
-                pilhaNavegacao.remove(atual);
                 pai.setFilhoEsquerda(atual.getFilhoDireita());
             } else {
-                pilhaNavegacao.remove(atual);
                 pai.setFilhoDireita(atual.getFilhoDireita());
             }
             return atual.getValor();
@@ -193,7 +180,6 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
                 substituto = substituto.getFilhoDireita();
             }
 
-            pilhaNavegacao.remove(atual);
             atual.setValor(substituto.getValor()); // Agora substituto é o nó que deve substituir o nó atual.
 
             if (paiSubstituto != atual) { // Verificar se o substituto tem filho à esquerda.
@@ -241,11 +227,18 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
     @Override
     public int quantidadeNos() {
-        if (pilhaNavegacao == null) {
-            return 0; // Árvore vazia, portanto, nenhum nó.
+        return contarNos(raiz);
+    }
+
+    private int contarNos(NoExemplo<T> no) {
+        if (no == null) {
+            return 0; // Caso base: nó nulo.
         }
 
-        return pilhaNavegacao.size();
+        int nosNaEsquerda = contarNos(no.getFilhoEsquerda());
+        int nosNaDireita = contarNos(no.getFilhoDireita());
+
+        return 1 + nosNaEsquerda + nosNaDireita;
     }
 
     @Override
@@ -289,7 +282,28 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
     @Override
     public String caminharEmOrdem() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder resultado = new StringBuilder("[");
+        if (raiz == null) {
+            resultado.append("Vazio]");
+        } else {
+            Stack<NoExemplo<T>> pilha = new Stack<>();
+            NoExemplo<T> atual = raiz;
+
+            while (atual != null || !pilha.isEmpty()) {
+                while (atual != null) {
+                    pilha.push(atual);
+                    atual = atual.getFilhoEsquerda();
+                }
+
+                atual = pilha.pop();
+                resultado.append(atual.getValor().toString()).append("\n");
+                atual = atual.getFilhoDireita();
+            }
+        }
+
+        resultado.append("]");
+
+        return resultado.toString();
     }
 
 
