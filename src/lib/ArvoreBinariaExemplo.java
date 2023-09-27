@@ -5,8 +5,7 @@
  */
 package lib;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 /**
  *
@@ -210,18 +209,34 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
     @Override
     public int altura() {
-        return calcularAltura(raiz);
+        if (raiz == null) {
+            return -1;
+        }
+
+        int altura = -1;
+        List<NoExemplo<T>> nivelAtual = new ArrayList<>();
+        nivelAtual.add(raiz);
+
+        while (!nivelAtual.isEmpty()) {
+            List<NoExemplo<T>> proximoNivel = new ArrayList<>();
+
+            for (NoExemplo<T> no : nivelAtual) {
+                if (no.getFilhoEsquerda() != null) {
+                    proximoNivel.add(no.getFilhoEsquerda());
+                }
+
+                if (no.getFilhoDireita() != null) {
+                    proximoNivel.add(no.getFilhoDireita());
+                }
+            }
+
+            nivelAtual = proximoNivel;
+            altura++;
+        }
+
+        return altura;
     }
 
-    private int calcularAltura(NoExemplo<T> no) {
-        if (no == null) {
-            return -1;
-        } else {
-            int alturaEsquerda = calcularAltura(no.getFilhoEsquerda());
-            int alturaDireita = calcularAltura(no.getFilhoDireita());
-            return Math.max(alturaEsquerda, alturaDireita) + 1;
-        }
-    }
 
 
     @Override
