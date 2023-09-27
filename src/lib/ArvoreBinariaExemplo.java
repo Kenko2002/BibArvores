@@ -236,10 +236,9 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
     @Override
     public String caminharEmNivel() {
         StringBuilder resultado = new StringBuilder("[");
-        if (raiz == null){
+        if (raiz == null) {
             resultado.append("Vazio]");
-            return resultado.toString();
-        } else (raiz != null) {
+        } else {
             ArrayList<NoExemplo<T>> nivelAtual = new ArrayList<>();
             nivelAtual.add(raiz);
 
@@ -247,7 +246,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
                 ArrayList<NoExemplo<T>> proximoNivel = new ArrayList<>();
 
                 for (NoExemplo<T> no : nivelAtual) {
-                    resultado.append(no.getValor().toString()).append("\n");
+                    resultado.append(no.getValor().toString());
 
                     if (no.getFilhoEsquerda() != null) {
                         proximoNivel.add(no.getFilhoEsquerda());
@@ -255,6 +254,10 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
                     if (no.getFilhoDireita() != null) {
                         proximoNivel.add(no.getFilhoDireita());
+                    }
+
+                    if (nivelAtual.indexOf(no) != nivelAtual.size() - 1) {
+                        resultado.append("\n");
                     }
                 }
 
