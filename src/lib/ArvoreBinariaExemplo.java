@@ -26,7 +26,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
 
     @Override
     public void adicionar(T novoValor) {
-        NoExemplo<T> novoNo = new NoExemplo<T>(novoValor);
+        NoExemplo<T> novoNo = new NoExemplo<>(novoValor);
 
         if (raiz == null) {
             pilhaNavegacao = new ArrayList<>();
@@ -53,7 +53,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
                 }
                 atual = atual.getFilhoDireita();
             } else {
-                // Se a diferença do comparador for 0, então já existe, se valor já existe na árvore, não faz nada. Ou podemos fazer com que todos nós duplicados sejam adicionado à direita. *Cada elemento possui um ramo esquerda (menores) e um ramo direito (maiores ou iguais)*
+                // Se a diferença do comparador for 0, então já existe, se valor já existe na árvore, não faz nada. Ou podemos fazer com que todos nós duplicados seja adicionado à direita. *Cada elemento possui um ramo esquerda (menores) e um ramo direito (maiores ou iguais)*
                 return;
             }
         }
@@ -201,7 +201,7 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         }
 
         int altura = -1;
-        pilhaNavegacao.clear(); // Limpa a pilha de navegação.
+        reiniciarNavegacao(); // Limpa a pilha de navegação.
         pilhaNavegacao.add(raiz); // Adiciona a raiz à pilha.
 
         while (!pilhaNavegacao.isEmpty()) {
@@ -288,16 +288,18 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
         if (raiz == null) {
             resultado.append("Vazio]");
         } else {
-            Stack<NoExemplo<T>> pilha = new Stack<>();
-            NoExemplo<T> atual = raiz;
+            reiniciarNavegacao(); // Limpa a pilha de navegação.
+            atual = raiz;
 
-            while (atual != null || !pilha.isEmpty()) {
+            while (atual != null || !pilhaNavegacao.isEmpty()) {
                 while (atual != null) {
-                    pilha.push(atual);
+                    pilhaNavegacao.add(atual);
                     atual = atual.getFilhoEsquerda();
                 }
 
-                atual = pilha.pop();
+                int tamanho = pilhaNavegacao.size();
+                atual = pilhaNavegacao.remove(tamanho - 1); // Remove o último elemento da pilha (pop).
+
                 resultado.append(atual.getValor().toString()).append("\n");
                 atual = atual.getFilhoDireita();
             }
@@ -315,8 +317,10 @@ public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
     }
 
     @Override
-    public void reiniciarNavegacao(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void reiniciarNavegacao() {
+        if (pilhaNavegacao != null) {
+            pilhaNavegacao.clear();
+        }
     }
 
 }
