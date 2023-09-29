@@ -11,7 +11,7 @@
      *
      * @author FeLiXp90, JoaoFerrareis02, Kenko2002, etc .....
      */
-    public class ArvoreBinariaExemplo<T> implements IArvoreBinaria<T> {
+    public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
         protected NoExemplo<T> raiz = null;
         protected Comparator<T> comparador;
@@ -20,7 +20,7 @@
         private ArrayList<NoExemplo<T>> pilhaNavegacao = null;
         private boolean primeiraChamada = true;
 
-        public ArvoreBinariaExemplo(Comparator<T> comp) {
+        public ArvoreBinaria(Comparator<T> comp) {
             comparador = comp;
         }
 
