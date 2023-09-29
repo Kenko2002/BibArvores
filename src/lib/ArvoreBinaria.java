@@ -13,11 +13,11 @@
      */
     public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
-        protected NoExemplo<T> raiz = null;
+        protected No<T> raiz = null;
         protected Comparator<T> comparador;
 
-        protected NoExemplo<T> atual = null;
-        private ArrayList<NoExemplo<T>> pilhaNavegacao = null;
+        protected No<T> atual = null;
+        private ArrayList<No<T>> pilhaNavegacao = null;
         private boolean primeiraChamada = true;
 
         public ArvoreBinaria(Comparator<T> comp) {
@@ -28,7 +28,7 @@
         public void adicionar(T novoValor) {
             if (raiz == null) {
                 pilhaNavegacao = new ArrayList<>(); //Uma vez que a raiz é criada, inicia o array pilha para métodos auxiliares da arvore.
-                raiz = new NoExemplo<>(novoValor);
+                raiz = new No<>(novoValor);
                 return;
             }
 
@@ -39,13 +39,13 @@
 
                 if (comparacao < 0) {
                     if (atual.getFilhoEsquerda() == null) {
-                        atual.setFilhoEsquerda(new NoExemplo<>(novoValor));
+                        atual.setFilhoEsquerda(new No<>(novoValor));
                         return; // Encerra o método quando o novo valor foi adicionado.
                     }
                     atual = atual.getFilhoEsquerda();
                 } else if (comparacao > 0) {
                     if (atual.getFilhoDireita() == null) {
-                        atual.setFilhoDireita(new NoExemplo<>(novoValor));
+                        atual.setFilhoDireita(new No<>(novoValor));
                         return; // Encerra o método quando o novo valor foi adicionado.
                     }
                     atual = atual.getFilhoDireita();
@@ -95,7 +95,7 @@
                 return null;
             }
 
-            NoExemplo<T> pai = null;
+            No<T> pai = null;
             atual = raiz;
 
             while (atual != null) {
@@ -176,8 +176,8 @@
              */
             if (atual.getFilhoEsquerda() != null && atual.getFilhoDireita() != null) {
 
-                NoExemplo<T> paiSubstituto = atual;
-                NoExemplo<T> substituto = atual.getFilhoEsquerda();
+                No<T> paiSubstituto = atual;
+                No<T> substituto = atual.getFilhoEsquerda();
 
                 while (substituto.getFilhoDireita() != null) {
                     paiSubstituto = substituto;
@@ -215,7 +215,7 @@
 
                 // Loop para processar todos os nós no nível atual.
                 for (int i = 0; i < tamanhoNivel; i++) {
-                    NoExemplo<T> no = pilhaNavegacao.remove(0); // Remove o primeiro nó da pilha para processamento.
+                    No<T> no = pilhaNavegacao.remove(0); // Remove o primeiro nó da pilha para processamento.
                     //Verifica se o no tem filhos a esquerda e direita e adiciona eles a pilha para serem processados no próximo loop.
                     if (no.getFilhoEsquerda() != null) {
                         pilhaNavegacao.add(no.getFilhoEsquerda());
@@ -236,7 +236,7 @@
             return contarNos(raiz);
         }
 
-        private int contarNos(NoExemplo<T> no) { //Ele vai atrás de todos os nós da arvore e soma. Por incrivel que pareça isso não dá erro e a recursão da altura sim, vai saber.
+        private int contarNos(No<T> no) { //Ele vai atrás de todos os nós da arvore e soma. Por incrivel que pareça isso não dá erro e a recursão da altura sim, vai saber.
             if (no == null) {
                 return 0; // Caso base: nó nulo, significa que a raiz é nula então temos 0 nós.
             }
@@ -253,13 +253,13 @@
             if (raiz == null) {
                 resultado.append("Vazio]"); //Se a arvore não existir, printa vazio.
             } else {
-                ArrayList<NoExemplo<T>> nivelAtual = new ArrayList<>(); // Cria uma lista para armazenar os nós do nível atual e inicia com a raiz.
+                ArrayList<No<T>> nivelAtual = new ArrayList<>(); // Cria uma lista para armazenar os nós do nível atual e inicia com a raiz.
                 nivelAtual.add(raiz);
 
                 while (!nivelAtual.isEmpty()) { // Enquanto houver nós no nível atual, continue
-                    ArrayList<NoExemplo<T>> proximoNivel = new ArrayList<>(); // Cria uma lista para armazenar os nós do próximo nível.
+                    ArrayList<No<T>> proximoNivel = new ArrayList<>(); // Cria uma lista para armazenar os nós do próximo nível.
 
-                    for (NoExemplo<T> no : nivelAtual) { // Itera pelos nós do nível atual.
+                    for (No<T> no : nivelAtual) { // Itera pelos nós do nível atual.
                         resultado.append(no.getValor().toString()); // Adiciona o valor do nó atual à representação em string.
                         /*
                          * Se houver um filho à esquerda, adiciona ao próximo nível.
@@ -370,7 +370,7 @@
                      * verifica se o nó atual é o filho direito do pai. Se for, continua subindo na
                      * árvore até encontrar um pai que não seja um filho direito.
                      */
-                    NoExemplo<T> pai = pilhaNavegacao.remove(pilhaNavegacao.size() - 1); // Se o nó atual não tiver filho à direita
+                    No<T> pai = pilhaNavegacao.remove(pilhaNavegacao.size() - 1); // Se o nó atual não tiver filho à direita
 
                     while (!pilhaNavegacao.isEmpty() && atual == pai.getFilhoDireita()) {
                         atual = pai; // Volta para o pai enquanto o nó atual for o filho direito do pai.
