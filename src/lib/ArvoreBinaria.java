@@ -17,7 +17,7 @@
         protected Comparator<T> comparador;
 
         protected No<T> atual = null;
-        private ArrayList<No<T>> pilhaNavegacao = null;
+        private ArrayList<No<T>> pilhaNavegacao = new ArrayList<>();
         private boolean primeiraChamada = true;
 
         public ArvoreBinaria(Comparator<T> comp) {
@@ -26,34 +26,29 @@
 
         @Override
         public void adicionar(T novoValor) {
-            if (raiz == null) {
-                pilhaNavegacao = new ArrayList<>(); //Uma vez que a raiz é criada, inicia o array pilha para métodos auxiliares da arvore.
-                raiz = new No<>(novoValor);
-                return;
-            }
-
-            atual = raiz;
-
-            while (true) {
-                int comparacao = comparador.compare(novoValor, atual.getValor());
-
-                if (comparacao < 0) {
-                    if (atual.getFilhoEsquerda() == null) {
-                        atual.setFilhoEsquerda(new No<>(novoValor));
-                        return; // Encerra o método quando o novo valor foi adicionado.
-                    }
-                    atual = atual.getFilhoEsquerda();
-                } else if (comparacao > 0) {
-                    if (atual.getFilhoDireita() == null) {
-                        atual.setFilhoDireita(new No<>(novoValor));
-                        return; // Encerra o método quando o novo valor foi adicionado.
-                    }
-                    atual = atual.getFilhoDireita();
+            NoArvore<T> novoNo = new NoArvore<>(novoValor);
+            if (this.raiz == null) {
+                this.raiz = novoNo;
+            } else {
+                this.raiz = adicionarRecursivo(this.raiz, novoNo);
+            } 
+        }
+    
+        protected NoArvore<T> adicionarRecursivo(NoArvore<T> atual, NoArvore<T> novo) {
+            if (comparador.compare(novo.getValor(), atual.getValor()) < 0) {
+                if (atual.getFilhoEsquerda() == null) {
+                    atual.setFilhoEsquerda(novo);
                 } else {
-                    // Se a diferença do comparador for 0, então já existe, se valor já existe na árvore, não faz nada. Ou podemos fazer com que todos nós duplicados seja adicionado à direita. *Cada elemento possui um ramo esquerda (menores) e um ramo direito (maiores ou iguais)*
-                    return;
+                    atual.setFilhoEsquerda(adicionarRecursivo(atual.getFilhoEsquerda(), novo));
+                }
+            } else {
+                if (atual.getFilhoDireita() == null) {
+                    atual.setFilhoDireita(novo);
+                } else {
+                    atual.setFilhoDireita(adicionarRecursivo(atual.getFilhoDireita(), novo));
                 }
             }
+            return atual;
         }
 
 
@@ -199,36 +194,7 @@
 
         @Override
         public int altura() {
-            if (raiz == null) { // Verifica se a árvore está vazia. Se estiver, retorna -1.
-                return -1;
-            }
-
-            // Inicializa a variável 'altura' como -1, limpa a pilha. Teria como fazer com recursão mas dá erro no app lá do professor, então deixei usando uma lista mesmo e fds. Qualquer coisa a gente volta pra recursão e faz o relatório lá.
-            int altura = -1;
-            reiniciarNavegacao();
-            pilhaNavegacao.add(raiz);
-
-            // Inicia um loop enquanto a pilha de navegação não estiver vazia.
-            while (!pilhaNavegacao.isEmpty()) {
-                // Obtém o tamanho atual da pilha, que representa o número de nós no nível atual.
-                int tamanhoNivel = pilhaNavegacao.size();
-
-                // Loop para processar todos os nós no nível atual.
-                for (int i = 0; i < tamanhoNivel; i++) {
-                    No<T> no = pilhaNavegacao.remove(0); // Remove o primeiro nó da pilha para processamento.
-                    //Verifica se o no tem filhos a esquerda e direita e adiciona eles a pilha para serem processados no próximo loop.
-                    if (no.getFilhoEsquerda() != null) {
-                        pilhaNavegacao.add(no.getFilhoEsquerda());
-                    }
-                    if (no.getFilhoDireita() != null) {
-                        pilhaNavegacao.add(no.getFilhoDireita());
-                    }
-                }
-
-                altura++; // Incrementa a variável 'altura' para indicar que todos os nós no nível atual foram processados.
-            }
-
-            return altura; // Retorna a altura calculada da árvore.
+            return raiz.obterAltura(); // Aciona a função de obter a altura do nó (raiz), retornando a altura calculada da árvore.
         }
 
         @Override
